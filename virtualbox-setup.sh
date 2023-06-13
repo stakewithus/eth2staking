@@ -1,3 +1,6 @@
+sudo apt-get update
+sudo apt install apt-transport-https ca-certificates curl gnupg software-properties-common iptables-persistent -y
+sudo mkdir -m 0755 -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 wget -qO - apt-key add https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 echo \
