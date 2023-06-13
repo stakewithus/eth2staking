@@ -31,9 +31,33 @@ docker compose up
 ```
 
 # Single-Deployment
-Easy way to start deploying a single Ethereum validator node cluster
+
+1. Run generate_key.sh script to generate 1 validator key
+
+```shell
+./generate-keys.sh <withdrawal key address>
+```shell
+
+2. Bring up docker containers
+
+```shell
+docker-compose up -d
+```shell
+
 
 # Multi-Deployment
+
+1. Run generate-key.sh script to generate 3 validator key
+
+```shell
+./generate_keys.sh <withdrawal key address>
+```shell
+
+2. Bring up docker containers
+
+```shell
+docker-compose up -d
+```shell
 
 # DVT (Based on Obol)
 
