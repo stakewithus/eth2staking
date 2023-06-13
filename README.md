@@ -36,13 +36,13 @@ docker compose up
 
 ```shell
 ./generate-keys.sh <withdrawal key address>
-```shell
+```
 
 2. Bring up docker containers
 
 ```shell
 docker-compose up -d
-```shell
+```
 
 
 # Multi-Deployment
@@ -51,13 +51,13 @@ docker-compose up -d
 
 ```shell
 ./generate_keys.sh <withdrawal key address>
-```shell
+```
 
 2. Bring up docker containers
 
 ```shell
 docker-compose up -d
-```shell
+```
 
 # DVT (Based on Obol)
 
