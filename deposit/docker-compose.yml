@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  script:
+    image: eth-deposit-script:2
+    build: .
+    env_file: .env
+    volumes:
+      - ./data:/app/data

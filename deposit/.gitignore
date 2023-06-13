@@ -1,0 +1,11 @@
+# dotenv files
+.env
+.env.*
+!.env.sample
+
+# node files
+build
+node_modules
+
+# typechain output
+typechain
