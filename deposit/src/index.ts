@@ -4,17 +4,18 @@ import { provider, signer } from './config';
 import CHAINS from './chains';
 import { isDepositDataArray } from './helpers';
 import { DepositContract__factory } from '../typechain';
-import { yn } from './prompt';
 
 async function main() {
 	const { chainId } = await provider.getNetwork();
 
-	if (CHAINS[chainId] == undefined) throw new Error(`Unsupported chain: ${chainId}`);
-	const chain = CHAINS[chainId];
+	console.log('Chain ID:', chainId);
 
-	console.log('Chain:', chain.name);
+	if (CHAINS[chainId] == undefined) throw new Error(`Unsupported chain.`);
 
-	const depositContract = DepositContract__factory.connect(chain.depositContract, signer);
+	const depositContractAddress = CHAINS[chainId].depositContract;
+	console.log('Deposit Contract Address:', depositContractAddress);
+
+	const depositContract = DepositContract__factory.connect(depositContractAddress, signer);
 
 	// read './data' folder for files
 	let paths = fs.readdirSync('data');
@@ -27,7 +28,7 @@ async function main() {
 		const file = fs.readFileSync(path);
 		const json = JSON.parse(file.toString());
 
-		console.log(`Reading file: ${p}`);
+		console.log(`Reading file: ${path}`);
 
 		if (!isDepositDataArray(json)) {
 			console.error(`$Invalid JSON at: ${path}. Skipping...`);
@@ -46,22 +47,23 @@ async function main() {
 				{ value: ethers.utils.parseUnits(amount.toString(), 'gwei') },
 			] as const;
 
+			// simulate tx first to check for problems
 			try {
-				console.log('Simulating deposit...');
 				await depositContract.callStatic.deposit(...args);
 			} catch (e) {
-				console.error('Simulation failed.');
 				console.error(e);
 				continue;
 			}
 
-			const response = yn('Simulation succeeded. Broadcast transaction?');
-			if (!response) continue;
+			// submit real tx upon user prompt
 
-			const tx = await depositContract.deposit(...args);
-			console.log(`Tx: ${chain.etherscan}${tx.hash}`);
-			await tx.wait();
-			console.log('Tx done.');
+			// only simulate transactions if BROADCAST in '.env' not set to true
+			if (process.env.BROADCAST?.toLowerCase() === 'true') {
+				const tx = await depositContract.deposit(...args);
+				console.log('Tx Hash:', tx.hash);
+				await tx.wait();
+				console.log('Tx done.');
+			}
 		}
 	}
 }
